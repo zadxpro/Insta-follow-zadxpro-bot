@@ -1,15 +1,7 @@
-services:
-  - type: web
-    name: instagram-follow-bot
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
-    envVars:
-      - key: BOT_TOKEN
-        value: 8800072025:AAEJidzl9vC0K2a7aUL9uINnL5vHDg2dnBU
-      - key: ADMIN_ID
-        value: "7424107874"
-      - key: RENDER_URL
-        value: https://instagram-follow-bot.onrender.com
-      - key: PORT
-        value: "8080"
+[build]
+builder = "nixpacks"
+buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+startCommand = "python bot.py"
+restartPolicyType = "always"
