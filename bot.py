@@ -16,7 +16,7 @@ from instagrapi.exceptions import UserNotFound, FollowError
 # ====== ТАНЗИМОТ ======
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "8800072025:AAEJidzl9vC0K2a7aUL9uINnL5vHDg2dnBU")
 ADMIN_ID = int(os.environ.get("ADMIN_ID", "7424107874"))
-RENDER_URL = os.environ.get("RENDER_URL", "")
+RAILWAY_URL = os.environ.get("RAILWAY_URL", "")
 PORT = int(os.environ.get("PORT", 8080))
 # ======================
 
@@ -44,8 +44,8 @@ def keep_alive():
     def _ping():
         while True:
             try:
-                if RENDER_URL:
-                    requests.get(f"{RENDER_URL}/ping", timeout=10)
+                if RAILWAY_URL:
+                    requests.get(f"{RAILWAY_URL}/ping", timeout=10)
             except:
                 pass
             time.sleep(30)
@@ -232,12 +232,12 @@ async def callback_handler(update, context):
 
     # ─── СТАТУС ───
     elif data == "status":
-        url = RENDER_URL or "❌ Танзим нашудааст"
+        url = RAILWAY_URL or "❌ Танзим нашудааст"
         await query.edit_message_text(
             f"📊 *Ҳолати сервер:*\n\n"
             f"🟢 Бот: Кор мекунад\n"
             f"👤 Аккаунтҳо: `{len(accounts)}` та\n"
-            f"🌐 Render URL: `{url}`\n"
+            f"🌐 Railway URL: `{url}`\n"
             f"🔌 Port: `{PORT}`\n"
             f"⏰ Keep Alive: 30 сония",
             parse_mode="Markdown", reply_markup=back_kb()
@@ -346,9 +346,9 @@ async def callback_handler(update, context):
 
     # ─── URL ТАНЗИМ ───
     elif data == "seturl":
-        context.user_data.update({"waiting": "render_url", "msg_id": msg_id})
+        context.user_data.update({"waiting": "railway_url", "msg_id": msg_id})
         await query.edit_message_text(
-            "⚙️ *Render URL*\n\n📝 URL-ро бифрист:\n_(масалан: https://my-bot.onrender.com)_",
+            "⚙️ *Railway URL*\n\n📝 URL-ро бифрист:\n_(масалан: https://my-bot.up.railway.app)_",
             parse_mode="Markdown", reply_markup=back_kb()
         )
 
@@ -661,14 +661,14 @@ async def message_handler(update, context):
                 parse_mode="Markdown", reply_markup=back_kb()
             )
 
-    # ─── RENDER URL ───
-    elif waiting == "render_url":
-        global RENDER_URL
-        RENDER_URL = text
+    # ─── RAILWAY URL ───
+    elif waiting == "railway_url":
+        global RAILWAY_URL
+        RAILWAY_URL = text
         context.user_data["waiting"] = None
         await context.bot.edit_message_text(
             chat_id=chat_id, message_id=msg_id,
-            text=f"✅ *URL танзим шуд!*\n\n🌐 `{RENDER_URL}`\n⏰ Keep Alive: 30 сония",
+            text=f"✅ *URL танзим шуд!*\n\n🌐 `{RAILWAY_URL}`\n⏰ Keep Alive: 30 сония",
             parse_mode="Markdown", reply_markup=back_kb()
         )
 
