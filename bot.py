@@ -11,7 +11,7 @@ from telegram.ext import (
     ContextTypes, MessageHandler, filters
 )
 from instagrapi import Client
-from instagrapi.exceptions import UserNotFound, FollowError
+from instagrapi.exceptions import UserNotFound
 
 # ====== ТАНЗИМОТ ======
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "8800072025:AAEJidzl9vC0K2a7aUL9uINnL5vHDg2dnBU")
@@ -446,17 +446,9 @@ async def _start_follow_process(context, chat_id, msg_id, user_id, count):
             cl.user_follow(target_uid)
             success += 1
             results.append(f"✅ №{num} @{acc_username} → follow кард")
-        except FollowError as e:
-            err_str = str(e).lower()
-            if "already" in err_str or "following" in err_str:
-                already_followed += 1
-                results.append(f"🔄 №{num} @{acc_username} → аллакай follow карда буд")
-            else:
-                failed += 1
-                results.append(f"❌ №{num} @{acc_username} → хато")
         except Exception as e:
             err_str = str(e).lower()
-            if "already" in err_str:
+            if "already" in err_str or "following" in err_str:
                 already_followed += 1
                 results.append(f"🔄 №{num} @{acc_username} → аллакай follow карда буд")
             else:
